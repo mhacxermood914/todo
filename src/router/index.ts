@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import BoardLayout from '@/layouts/BoardLayout.vue'
 import useAuthUser from '@/composables/useAuth'
 
 const router = createRouter({
@@ -16,20 +17,27 @@ const router = createRouter({
     },
     {
       path: '/board',
-      name: 'board',
-      meta: {
-        requiresAuth: true,
-      },
-      component: () => import('@/views/board/Home.vue'),
+      component: BoardLayout, 
+      children: [
+        {
+          path: '', 
+          name: 'board',
+          meta: {
+            requiresAuth: true,
+          },
+          component: () => import('@/views/board/Home.vue'),
+        },
+        {
+          path: ':id', 
+          meta: {
+            requiresAuth: true,
+          },
+          name: 'board-detail',
+          component: () => import('@/views/board/Overview.vue'),
+        },
+      ],
     },
-    {
-      path: '/board/:id',
-      name: 'board-overview',
-      meta: {
-        requiresAuth: true,
-      },
-      component: () => import('@/views/board/Overview.vue'),
-    },
+  
     // {
     //   path: '/about',
     //   name: 'about',
