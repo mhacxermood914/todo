@@ -20,8 +20,6 @@ export default function useAuthUser() {
 
   const logout = async () => {}
 
-  const isLoggedIn = () => {}
-
   const register = async ({ email, password, ...meta }: authInfo) => {
     let { data, error } = await supabase.auth.signUp({
       email,
@@ -37,6 +35,9 @@ export default function useAuthUser() {
 
   const setUser = async (data: any) => {
     authStore.login({ isLoggedIn: true, user: data })
+  }
+  const isLoggedIn = () => {
+    return authStore.isAuth
   }
 
   const sendPasswordRestEmail = async (email: string) => {}
