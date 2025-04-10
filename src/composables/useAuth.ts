@@ -18,7 +18,10 @@ export default function useAuthUser() {
     return { data, error }
   }
 
-  const logout = async () => {}
+  const logout = async () => {
+    const { error } = await supabase.auth.signOut();
+    setUser({isLoggedIn: false, user:null})
+  }
 
   const register = async ({ email, password, ...meta }: authInfo) => {
     let { data, error } = await supabase.auth.signUp({
