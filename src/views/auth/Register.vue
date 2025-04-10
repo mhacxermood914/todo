@@ -2,7 +2,7 @@
   <div class="font-poppins flex items-center justify-center h-screen bg-[#eeee]">
     <div class="w-1/3 bg-white rounded-md shadow-sm p-4">
       <div class="flex justify-between">
-        <div class="uppercase font-semibold">Cr&eacute;e un compte.</div>
+        <div class="uppercase font-semibold">Cr&eacute;e un compte</div>
         <router-link :to="{ name: 'login' }" class="text-sm underline text-blue-900"
           >Se connecter</router-link
         >
