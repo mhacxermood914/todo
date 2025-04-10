@@ -11,11 +11,15 @@
       <form class="space-y-3 my-4" @submit.prevent="handleSubmit">
         <div class="flex flex-col space-y-2">
           <label for="">Email</label>
-          <input type="text" class="bg-[#eeee] outline-none h-[2rem] px-1" />
+          <input type="text" v-model="data.email" class="bg-[#eeee] outline-none h-[2rem] px-1" />
         </div>
         <div class="flex flex-col space-y-2">
           <label for="">Password</label>
-          <input type="text" class="bg-[#eeee] outline-none h-[2rem] px-1" />
+          <input
+            type="text"
+            v-model="data.password"
+            class="bg-[#eeee] outline-none h-[2rem] px-1"
+          />
         </div>
         <div class="">
           <button
@@ -28,11 +32,19 @@
     </div>
   </div>
 </template>
-<script lang="ts" setup>
-  import {ref} from 'vue'
+<script setup>
+import { ref } from 'vue'
+import useAuthUser from '@/composables/useAuth'
 
-  const data = ref({
-    email: "", 
-    password: ""
-  })
+const data = ref({
+  email: '',
+  password: '',
+})
+
+const { login } = useAuthUser()
+
+async function handleSubmit() {
+  //   console.log({ data })
+  let res = await login(data.value)
+}
 </script>

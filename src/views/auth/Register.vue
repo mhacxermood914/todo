@@ -21,13 +21,14 @@
             class="bg-[#eeee] outline-none h-[2rem] px-1"
           />
         </div>
-        <div class="">
-          <button
-            class="bg-blue-900 p-2 text-white rounded-md mt-3 w-full hover:bg-white hover:text-black in-hover:border-blue-900 hover:border hover:cursor-pointer"
-          >
-            S'inscrire
-          </button>
-        </div>
+        <!-- <div class=""> -->
+        <button
+          type="submit"
+          class="bg-blue-900 p-2 text-white rounded-md mt-3 w-full hover:bg-white hover:text-black in-hover:border-blue-900 hover:border hover:cursor-pointer"
+        >
+          S'inscrire
+        </button>
+        <!-- </div> -->
       </form>
     </div>
   </div>

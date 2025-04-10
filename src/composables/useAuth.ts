@@ -1,7 +1,8 @@
 import { ref } from 'vue'
 import useSupabase from './useSupabase'
+import { useAuthStore } from '@/stores/auth'
 
-const user = ref(null)
+const user: any = ref(null)
 const { supabase } = useSupabase()
 
 type authInfo = {
@@ -11,7 +12,11 @@ type authInfo = {
 }
 
 export default function useAuthUser() {
-  const login = async ({ email, password }: authInfo) => {}
+  const authStore = useAuthStore()
+  const login = async ({ email, password }: authInfo) => {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    return { data, error }
+  }
 
   const logout = async () => {}
 
@@ -30,8 +35,8 @@ export default function useAuthUser() {
 
   const update = async (data: any) => {}
 
-  const setUser = async ()=>{
-    
+  const setUser = async (data: any) => {
+    authStore.login({ isLoggedIn: true, user: data })
   }
 
   const sendPasswordRestEmail = async (email: string) => {}
@@ -42,6 +47,7 @@ export default function useAuthUser() {
     isLoggedIn,
     logout,
     register,
+    setUser,
     update,
     sendPasswordRestEmail,
   }
