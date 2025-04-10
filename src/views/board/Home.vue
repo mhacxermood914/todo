@@ -39,7 +39,7 @@
     <div class="mt-[4rem]">
       <div class="flex space-x-4 w-11/12 mx-auto mb-4">
         <div class="font-semibold">My board</div>
-        <button class="text-gray-400 cursor-pointer" @click="showModal">
+        <button class="text-gray-400 cursor-pointer outline-none" @click="showModal">
           <i></i>
           Add a board
         </button>
@@ -89,6 +89,7 @@ function addBoard() {
     ...board.value,
   }
   boards.value.push(payload)
+  board.value.name = ''
   closeModal()
 }
 
