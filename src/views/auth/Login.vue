@@ -8,7 +8,7 @@
         >
       </div>
 
-      <form class="space-y-3 my-4">
+      <form class="space-y-3 my-4" @submit.prevent="handleSubmit">
         <div class="flex flex-col space-y-2">
           <label for="">Email</label>
           <input type="text" class="bg-[#eeee] outline-none h-[2rem] px-1" />
@@ -28,4 +28,11 @@
     </div>
   </div>
 </template>
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+  import {ref} from 'vue'
+
+  const data = ref({
+    email: "", 
+    password: ""
+  })
+</script>
