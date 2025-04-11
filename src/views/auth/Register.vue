@@ -38,6 +38,7 @@
 </template>
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import useAuthUser from '@/composables/useAuth'
@@ -46,7 +47,7 @@ const data = ref({
   email: '',
   password: '',
 })
-
+const router = useRouter()
 const { register } = useAuthUser()
 const loading = ref(false)
 
@@ -61,10 +62,17 @@ async function handleSubmit() {
   console.log({ res })
 
   if (!res.error) {
-    toast('Inscription réussi.!!!', {
+    toast('Inscription réussi.', {
       autoClose: 1000,
       type: 'success',
     })
+
+    toast('Veuillez consulter votre boite mail pour activer votre compte.', {
+      autoClose: 1000,
+      type: 'success',
+    })
+
+    router.push({ name: 'login' })
   } else {
     toast(res.error.message, {
       autoClose: 1000,
