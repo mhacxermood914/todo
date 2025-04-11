@@ -156,9 +156,15 @@ function onDrop(targetListIndex) {
     fromListIndex !== targetListIndex
   ) {
     // Remove from original
-    const card = list.value[fromListIndex].cards.splice(cardIndex, 1)[0]
+    const card = list[fromListIndex].cards.splice(cardIndex, 1)[0]
     // Add to target
-    list.value[targetListIndex].cards.unshift(card)
+
+    boardStore.addCardToList(
+      boardStore.boards.findIndex((el) => el.id === boardId),
+      targetListIndex,
+      null,
+      card,
+    )
 
     // Reset temp values
     draggedCard.value = null
@@ -192,14 +198,19 @@ function onAdd(event) {
 }
 
 function moveCardToTrash(i, j) {
-  list.value[i].cards = list.value[i].cards.filter((el, ind) => ind !== j)
-  console.log({ list })
+  boardStore.deleteCardFromList(
+    boardStore.boards.findIndex((el) => el.id === boardId),
+    i,
+    j,
+  )
 }
 
 function moveListToTrash(i) {
   if (i) {
-    list.value = list.value.filter((el, ind) => ind !== i)
-    console.log({ list })
+    boardStore.deleteListFromBoardByid(
+      boardStore.boards.findIndex((el) => el.id === boardId),
+      i,
+    )
   }
 }
 

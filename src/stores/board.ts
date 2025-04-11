@@ -41,8 +41,8 @@ export const useBoardStore = defineStore('board-store', {
         this.boards[index].list[listIndex].name = newName
       }
     },
-    addCardToList(boardIndex: number, listIndex: number, content: string) {
-      const newCard = {
+    addCardToList(boardIndex: number, listIndex: number, content: string, card:any = null) {
+      const newCard = card || {
         id: this.boards[boardIndex].list[listIndex].cards.length + 1,
         content: content || '',
       }
