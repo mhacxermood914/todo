@@ -104,6 +104,7 @@ const edit = ref(false)
 async function getBoard() {
   loadingBoards.value = true
   const res = await readBoard()
+  console.log({ res })
   const boards = await Promise.all(
     res.data.map(async (el) => {
       const lists = await readBoardList(el.id)
@@ -191,6 +192,8 @@ async function addBoard() {
   console.log({ res })
 
   addBoardList({ boardid: res.data.pop().id, name: 'Untitled' })
+
+  getBoard()
 
   boardStore.addBoard(payload)
   board.value.name = ''

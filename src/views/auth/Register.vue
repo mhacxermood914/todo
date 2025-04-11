@@ -71,8 +71,6 @@ async function handleSubmit() {
       autoClose: 4000,
       type: 'success',
     })
-
-    router.push({ name: 'login' })
   } else {
     toast(res.error.message, {
       autoClose: 1000,

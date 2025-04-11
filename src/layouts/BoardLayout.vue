@@ -5,7 +5,11 @@
       <div class="font-bold text-xl">Board</div>
 
       <div class="relative group">
-        <div class="h-10 w-10 rounded-full bg-gray-400 cursor-pointer"></div>
+        <div
+          class="h-10 w-10 rounded-full flex items-center justify-center text-lg bg-gray-400 cursor-pointer"
+        >
+          <font-awesome-icon icon="user-alt"></font-awesome-icon>
+        </div>
         <ul
           class="absolute hidden group-hover bg-white shadow-md -mt-1 pt-[.5rem] rounded text-sm z-10 right-[.5rem]"
         >
@@ -14,8 +18,6 @@
       </div>
     </div>
     <!-- end header -->
-
-    
 
     <div class="">
       <router-view />
