@@ -50,7 +50,7 @@
                 <font-awesome-icon
                   icon="trash-alt"
                   class="cursor-pointer"
-                  @click.stop="moveBoardToTrash($event, i)"
+                  @click.stop="moveBoardToTrash($event, i, item.id)"
                 />
               </div>
             </div>
@@ -141,9 +141,10 @@ async function addBoard() {
   closeModal()
 }
 
-function moveBoardToTrash(event, index) {
+function moveBoardToTrash(event, index, id = null) {
   event.preventDefault()
   event.stopPropagation()
+  deleteBoard(id)
   boardStore.deleteBoardByid(index)
 }
 
