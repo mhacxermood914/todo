@@ -23,10 +23,16 @@ export const useBoardStore = defineStore('board-store', {
     getListByBoardId: (state) => {
       return (id: number) => state.boards.find((el: any) => el.id === id)
     },
+    getBoard(state){
+        return state.boards
+    }
   },
   actions: {
     addBoard(board: any) {
       this.boards.push(board)
+    },
+    setBoards(boards:any){
+        this.boards = boards
     },
     addListToBoardByid(index: number, list: any) {
       this.boards[index].list.push(list)

@@ -62,14 +62,36 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import useAuthUser from '@/composables/useAuth'
 import useBoard from '@/composables/useBoard'
 import router from '@/router'
 import { useBoardStore } from '@/stores/board'
 
 const boardStore = useBoardStore()
-const { add } = useBoard()
+const { addBoard: addToBoard, readBoard } = useBoard()
+
+onMounted(() => {
+  getBoard()
+})
+
+async function getBoard() {
+  const res = await readBoard()
+  boardStore.setBoards(
+    res.data.map((el) => ({
+      ...el,
+      list: [
+        {
+          id: boardStore.getBoard().length + 1,
+          boardId: el.id,
+          name: 'untitled',
+          cards: [],
+        },
+      ],
+    })),
+  )
+  console.log({ res })
+}
 
 const { logout } = useAuthUser()
 
@@ -87,7 +109,7 @@ function closeModal() {
   modal.value.closeModal()
 }
 
-function addBoard() {
+async function addBoard() {
   let payload = {
     id: boardStore.boards.length + 1,
     ...board.value,
@@ -101,7 +123,8 @@ function addBoard() {
     ],
   }
 
-  add({ name: payload.name })
+  let res = await addToBoard({ name: payload.name })
+  
 
   boardStore.addBoard(payload)
   board.value.name = ''

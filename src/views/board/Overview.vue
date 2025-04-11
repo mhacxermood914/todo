@@ -102,6 +102,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import useBoard from '@/composables/useBoard'
 import { useRoute, useRouter } from 'vue-router'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useBoardStore } from '@/stores/board'
@@ -115,6 +116,8 @@ const router = useRouter()
 const boardStore = useBoardStore()
 
 const boardId = Number(route.params.id)
+
+const { addBoardList } = useBoard()
 
 const boardName = computed(() => {
   const board = boardStore.getListByBoardId(boardId)
@@ -183,6 +186,7 @@ function onDrop(targetListIndex) {
 }
 
 function addNewList() {
+
   boardStore.addListToBoardByid(
     boardStore.boards.findIndex((el) => el.id === boardId),
     {
@@ -192,6 +196,9 @@ function addNewList() {
       cards: [],
     },
   )
+
+  addBoardList({ boardid: boardId, name: 'Untitled' })
+
 }
 
 function addCard(index) {
