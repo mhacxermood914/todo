@@ -14,7 +14,11 @@
             <button
               class="bg-blue-900 p-2 text-white rounded-md mt-3 w-full hover:bg-white hover:text-black in-hover:border-blue-900 hover:border hover:cursor-pointer"
             >
-              Ajouter un nouveau board
+              <div v-if="!loading">Ajouter un nouveau board</div>
+              <div
+                v-else
+                class="w-6 h-6 border-3 border-gray-200 border-t-blue-500 rounded-full animate-spin mx-auto"
+              ></div>
             </button>
           </form>
         </div>
@@ -75,7 +79,10 @@ onMounted(() => {
   getBoard()
 })
 
+const loading = ref(false)
+
 async function getBoard() {
+  loading.value = true
   const res = await readBoard()
   const boards = await Promise.all(
     res.data.map(async (el) => {
@@ -99,6 +106,8 @@ async function getBoard() {
 
   console.log({ res, boards })
   boardStore.setBoards(boards)
+
+  loading.value = false
 }
 
 const { logout } = useAuthUser()
@@ -118,6 +127,7 @@ function closeModal() {
 }
 
 async function addBoard() {
+  loading.value = true
   let payload = {
     id: boardStore.boards.length + 1,
     ...board.value,
@@ -138,6 +148,7 @@ async function addBoard() {
 
   boardStore.addBoard(payload)
   board.value.name = ''
+  loading.value = false
   closeModal()
 }
 
