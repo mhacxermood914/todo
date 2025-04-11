@@ -104,7 +104,7 @@ const edit = ref(false)
 async function getBoard() {
   loadingBoards.value = true
   const res = await readBoard()
-  console.log({ res })
+  // console.log({ res })
   const boards = await Promise.all(
     res.data.map(async (el) => {
       const lists = await readBoardList(el.id)
@@ -128,7 +128,7 @@ async function getBoard() {
     }),
   )
 
-  console.log({ res, boards })
+  // console.log({ res, boards })
   boardStore.setBoards(boards)
 
   loadingBoards.value = false
@@ -189,7 +189,7 @@ async function addBoard() {
   }
 
   let res = await addToBoard({ name: payload.name })
-  console.log({ res })
+  // console.log({ res })
 
   addBoardList({ boardid: res.data.pop().id, name: 'Untitled' })
 

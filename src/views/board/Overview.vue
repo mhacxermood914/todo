@@ -80,7 +80,7 @@
                 id=""
                 :ref="(el) => setTextareaRef(el, i, j)"
                 rows="4"
-                @blur="handleBlur(card.content, card.id)"
+                @keyup="handleInputChange(card.content, card.id)"
                 v-model="card.content"
               ></textarea>
             </div>
@@ -103,6 +103,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import useBoard from '@/composables/useBoard'
+import debounce from 'lodash.debounce'
 import { useRoute, useRouter } from 'vue-router'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useBoardStore } from '@/stores/board'
@@ -143,8 +144,6 @@ function setTextareaRef(el, index, j) {
   }
 }
 
-
-
 function goBack() {
   router.back()
 }
@@ -162,7 +161,7 @@ const draggedCard = ref(null)
 const draggedFrom = ref({ listIndex: null, cardIndex: null, fromlistid: null })
 
 function onDragStart(card, listIndex, cardIndex, id = null) {
-  console.log({ card, listIndex, cardIndex, id })
+  // console.log({ card, listIndex, cardIndex, id })
   draggedCard.value = card
   draggedFrom.value = { listIndex, cardIndex, id }
 }
@@ -170,7 +169,7 @@ function onDragStart(card, listIndex, cardIndex, id = null) {
 function onDrop(targetListIndex, targetId = null) {
   const { listIndex: fromListIndex, cardIndex, id } = draggedFrom.value
 
-  console.log({ targetListIndex })
+  // console.log({ targetListIndex })
 
   if (
     draggedCard.value &&
@@ -178,9 +177,7 @@ function onDrop(targetListIndex, targetId = null) {
     cardIndex !== null &&
     fromListIndex !== targetListIndex
   ) {
-    // Remove from original
     const card = list[fromListIndex].cards.splice(cardIndex, 1)[0]
-    // Add to target
 
     boardStore.addCardToList(
       boardStore.boards.findIndex((el) => el.id === boardId),
@@ -188,11 +185,8 @@ function onDrop(targetListIndex, targetId = null) {
       null,
       card,
     )
-
-    // update
     moveBoardCardFromListToAnother({ from: id, to: targetId })
 
-    // Reset temp values
     draggedCard.value = null
     draggedFrom.value = { listIndex: null, cardIndex: null }
   }
@@ -221,11 +215,11 @@ function addCard(index, id = null) {
 
   addBoardCard({ content: '', listid: id })
 
-  console.log({ list })
+  // console.log({ list })
 }
 
 function onAdd(event) {
-  console.log('add', event)
+  // console.log('add', event)
 }
 
 function moveCardToTrash(i, j, id = null) {
@@ -254,13 +248,18 @@ function onBlur(id, name) {
   listInputClassName.value = 'outline-none font-semibold w-11/12'
 }
 
+const debouncedUpdateBoardCard = debounce(handleBlur, 1000)
+const handleInputChange = (content, id) => {
+  debouncedUpdateBoardCard(content, id)
+}
+
 function handleBlur(content, id) {
   updateBoardCard({ content, id })
-  console.log({ list })
+  // console.log({ list, content, id })
 }
 
 function onCardChange(event) {
-  console.log('Card moved:', event)
+  // console.log('Card moved:', event)
 }
 
 function onFocus() {
