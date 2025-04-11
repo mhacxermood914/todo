@@ -192,18 +192,18 @@ function onDrop(targetListIndex, targetId = null) {
   }
 }
 
-function addNewList() {
+async function addNewList() {
+  let { data } = await addBoardList({ boardid: boardId, name: 'Untitled' })
+  console.log({ data })
   boardStore.addListToBoardByid(
     boardStore.boards.findIndex((el) => el.id === boardId),
     {
-      id: list.length + 1,
+      id: data.pop().id,
       boardId,
       name: 'untitled',
       cards: [],
     },
   )
-
-  addBoardList({ boardid: boardId, name: 'Untitled' })
 }
 
 function addCard(index, id = null) {
@@ -233,10 +233,13 @@ function moveCardToTrash(i, j, id = null) {
 }
 
 function moveListToTrash(i, id = null) {
-  if (i) {
+  console.log({ id, i })
+  if (id) {
     boardStore.deleteListFromBoardByid(
       boardStore.boards.findIndex((el) => el.id === boardId),
-      i,
+      boardStore.boards[boardStore.boards.findIndex((el) => el.id === boardId)].list.findIndex(
+        (el) => el.id == id,
+      ),
     )
 
     deleteBoardList(id)
