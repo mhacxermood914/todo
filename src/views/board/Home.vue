@@ -32,7 +32,11 @@
       </button>
     </div>
     <div class="flex items-center justify-center">
-      <div class="text-2xl" v-if="!boardStore.boards.length">No Board available</div>
+      <div
+        v-if="loading"
+        class="w-6 h-6 border-3 border-gray-200 border-t-blue-500 rounded-full animate-spin mx-auto"
+      ></div>
+      <div class="text-2xl" v-else-if="!boardStore.boards.length">No Board available</div>
       <div v-else class="w-11/12 mx-auto grid grid-cols-4 gap-8">
         <router-link
           tag="div"
@@ -98,9 +102,6 @@ async function getBoard() {
       const mappedLists = await Promise.all(
         lists.data.map(async (listItem) => {
           const cards = await readBoardCard({ listid: listItem.id })
-
-          console.log({ cards })
-
           return {
             id: listItem.id,
             boardId: el.id,
