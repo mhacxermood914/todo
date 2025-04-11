@@ -31,6 +31,11 @@ export const useBoardStore = defineStore('board-store', {
     addListToBoardByid(index: number, list: any) {
       this.boards[index].list.push(list)
     },
+    deleteBoardByid(index: number) {
+      if (this.boards[index]) {
+        this.boards.splice(index, 1)
+      }
+    },
     deleteListFromBoardByid(index: number, listIndex: number) {
       if (this.boards[index] && this.boards[index].list[listIndex]) {
         this.boards[index].list.splice(listIndex, 1)
@@ -41,7 +46,7 @@ export const useBoardStore = defineStore('board-store', {
         this.boards[index].list[listIndex].name = newName
       }
     },
-    addCardToList(boardIndex: number, listIndex: number, content: string, card:any = null) {
+    addCardToList(boardIndex: number, listIndex: number, content: string, card: any = null) {
       const newCard = card || {
         id: this.boards[boardIndex].list[listIndex].cards.length + 1,
         content: content || '',
