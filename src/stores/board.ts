@@ -10,16 +10,16 @@ export const useBoardStore = defineStore('board-store', {
     getListByBoardId: (state) => {
       return (id: number) => state.boards.find((el: any) => el.id === id)
     },
-    getBoard(state){
-        return state.boards
-    }
+    getBoard(state) {
+      return state.boards
+    },
   },
   actions: {
     addBoard(board: any) {
       this.boards.push(board)
     },
-    setBoards(boards:any){
-        this.boards = boards
+    setBoards(boards: any) {
+      this.boards = boards
     },
     addListToBoardByid(index: number, list: any) {
       this.boards[index].list.push(list)
@@ -39,12 +39,19 @@ export const useBoardStore = defineStore('board-store', {
         this.boards[index].list[listIndex].name = newName
       }
     },
-    addCardToList(boardIndex: number, listIndex: number, content: string, card: any = null) {
+    addCardToList(
+      boardIndex: number,
+      listIndex: number,
+      content: string,
+      card: any = null,
+      id: any,
+    ) {
       const newCard = card || {
-        id: this.boards[boardIndex].list[listIndex].cards.length + 1,
+        id,
         content: content || '',
       }
 
+      console.log({ newCard })
       this.boards[boardIndex].list[listIndex].cards.unshift(newCard)
     },
 

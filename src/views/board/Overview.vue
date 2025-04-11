@@ -206,14 +206,17 @@ async function addNewList() {
   )
 }
 
-function addCard(index, id = null) {
+async function addCard(index, id = null) {
+  let res = await addBoardCard({ content: '', listid: id })
+  console.log({ res })
+
   boardStore.addCardToList(
     boardStore.boards.findIndex((el) => el.id === boardId),
     index,
     null,
+    null,
+    res.data.pop().id,
   )
-
-  addBoardCard({ content: '', listid: id })
 
   // console.log({ list })
 }
@@ -233,7 +236,6 @@ function moveCardToTrash(i, j, id = null) {
 }
 
 function moveListToTrash(i, id = null) {
-  console.log({ id, i })
   if (id) {
     boardStore.deleteListFromBoardByid(
       boardStore.boards.findIndex((el) => el.id === boardId),

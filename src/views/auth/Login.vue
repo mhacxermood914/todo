@@ -38,6 +38,7 @@
 </template>
 <script setup>
 import { ref } from 'vue'
+import router from '../../router'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import useAuthUser from '@/composables/useAuth'
@@ -63,6 +64,7 @@ async function handleSubmit() {
       autoClose: 1000,
       type: 'success',
     })
+    router.push({ name: 'board' })
   } else {
     toast(res.error.message, {
       autoClose: 1000,

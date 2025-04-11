@@ -49,10 +49,10 @@ export default function useBoard() {
   }
 
   const addBoardCard = async ({ content, listid }: { content: string; listid: number }) => {
-    const { data, error } = await supabase
-      .from('cards')
-      .insert([{ content, boardviewid: listid }])
-      .select()
+    await supabase.from('cards').insert([{ content, boardviewid: listid }])
+
+    let { data, error } = await readBoardCard({ listid })
+
     return { data, error }
   }
 
