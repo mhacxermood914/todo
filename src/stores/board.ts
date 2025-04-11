@@ -6,8 +6,15 @@ export const useBoardStore = defineStore('board-store', {
       boards: [
         {
           id: 1,
-          name: 'Board 1',
-          list: [],
+          name: 'Untitled Board',
+          list: [
+            {
+              id: 1,
+              boardId: 1,
+              name: 'untitled',
+              cards: [],
+            },
+          ],
         },
       ],
     }

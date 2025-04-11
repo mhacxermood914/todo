@@ -1,6 +1,6 @@
 <template>
   <div class="w-11/12 mx-auto mt-[2rem] font-poppins overflow-x-auto">
-    <div class="font-semibold mb-3">Board 1</div>
+    <div class="font-semibold mb-3">{{ boardName }}</div>
     <div class="flex h-[calc(100vh-10rem)] space-x-3">
       <div class="w-[20%] flex space-x-3">
         <div
@@ -96,22 +96,27 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { VueDraggable } from 'vue-draggable-plus'
-import {useBoardStore} from "@/stores/board"
+import { useBoardStore } from '@/stores/board'
+import { createDOMCompilerError } from '@vue/compiler-dom'
 
 const listInputClassName = ref('outline-none font-semibold w-11/12')
 
+const route = useRoute()
+
 const boardStore = useBoardStore()
 
-const list = ref([
-  {
-    id: 1,
-    boardId: 1,
-    name: 'untitled',
-    cards: [],
-  },
-])
+const boardId = Number(route.params.id)
+
+const boardName = computed(() => {
+  const board = boardStore.getListByBoardId(boardId)
+  return board.name || 'Untitled Board'
+})
+
+const list = boardStore.getListByBoardId(boardId).list
+console.log({ list })
 
 const textareas = ref([])
 
@@ -185,7 +190,7 @@ function moveCardToTrash(i, j) {
 }
 
 function moveListToTrash(i) {
-  if(i){
+  if (i) {
     list.value = list.value.filter((el, ind) => ind !== i)
     console.log({ list })
   }
