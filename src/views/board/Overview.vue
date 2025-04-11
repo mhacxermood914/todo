@@ -58,14 +58,14 @@
             >
               <div class="flex justify-end h-8">
                 <div class="flex space-x-4">
-                  <div class="group-hover:block">
+                  <div class="group-hover hidden">
                     <font-awesome-icon
                       icon="pencil-alt"
                       class="cursor-pointer"
                       @click="focusTextarea(i, j)"
                     />
                   </div>
-                  <div class="group-hover:block">
+                  <div class="group-hover hidden">
                     <font-awesome-icon
                       icon="trash-alt"
                       class="cursor-pointer"

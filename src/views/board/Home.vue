@@ -34,7 +34,7 @@
           :to="{ path: '/board/' + item.id }"
           v-for="item in boardStore.boards"
           :key="item.id"
-          class="bg-white flex items-center justify-center w-full hover:bg-blue-900 hover:text-white rounded-md h-[8rem] shadow-md cursor-pointer"
+          class="bg-white flex items-center justify-center w-full board-card hover:text-white rounded-md h-[8rem] shadow-md cursor-pointer"
         >
           {{ item.name }}
         </router-link>

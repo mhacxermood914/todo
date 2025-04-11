@@ -3,3 +3,8 @@
 .group:hover .group-hover {
   display: block !important;
 }
+
+.board-card:hover {
+  background-color: #1c398e;
+  color: white;
+}
