@@ -68,7 +68,7 @@ async function handleSubmit() {
     })
 
     toast('Veuillez consulter votre boite mail pour activer votre compte.', {
-      autoClose: 1000,
+      autoClose: 4000,
       type: 'success',
     })
 

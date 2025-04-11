@@ -2,7 +2,7 @@
   <div class="mt-[4rem]">
     <Modal ref="modal">
       <template #modal-content>
-        <div>
+        <div class="font-poppins">
           <form @submit.prevent="addBoard">
             <div>
               <label for="" class="mt-8 block">Nom du board</label>

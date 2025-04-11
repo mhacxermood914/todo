@@ -33,7 +33,7 @@
             <div class="flex items-center">
               <button
                 class="text-2xl font-medium cursor-pointer hover:bg-gray-200 w-8 rounded-md"
-                @click="addCard(i)"
+                @click="addCard(i, item.id)"
               >
                 +
               </button>
@@ -54,7 +54,7 @@
               :key="card.id"
               draggable="true"
               @dragstart="onDragStart(card, i, j)"
-              class="w-full group bg-gray-200 my-4 p-2 rounded-md min-h-[8rem] cursor-pointer max-h-[14rem]"
+              class="w-full group bg-gray-200 my-4 p-2 rounded-md min-h-[8rem] cursor-move max-h-[14rem]"
             >
               <div class="flex justify-end h-8">
                 <div class="flex space-x-4">
@@ -117,7 +117,7 @@ const boardStore = useBoardStore()
 
 const boardId = Number(route.params.id)
 
-const { addBoardList } = useBoard()
+const { addBoardList, addBoardCard } = useBoard()
 
 const boardName = computed(() => {
   const board = boardStore.getListByBoardId(boardId)
@@ -201,12 +201,15 @@ function addNewList() {
 
 }
 
-function addCard(index) {
+function addCard(index, id=null) {
   boardStore.addCardToList(
     boardStore.boards.findIndex((el) => el.id === boardId),
     index,
     null,
   )
+
+  addBoardCard({content:'', listid: id})
+
   console.log({ list })
 }
 

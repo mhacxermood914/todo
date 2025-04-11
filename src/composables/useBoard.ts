@@ -28,12 +28,12 @@ export default function useBoard() {
     return { error }
   }
 
-  const addBoardList = async ({ name, boardid }: { name: string, boardid:number }) => {
-    const { data, error } = await supabase.from('board-view').insert([{ name,boardid }]).select()
+  const addBoardList = async ({ name, boardid }: { name: string; boardid: number }) => {
+    const { data, error } = await supabase.from('board-view').insert([{ name, boardid }]).select()
     return { data, error }
   }
 
-  const readBoardList = async (boardid:  number) => {
+  const readBoardList = async (boardid: number) => {
     let { data, error } = await supabase.from('board-view').select('id,name').eq('boardid', boardid)
     return { data, error }
   }
@@ -48,12 +48,15 @@ export default function useBoard() {
     return { error }
   }
 
-  const addBoardCard = async ({ name }: { name: string }) => {
-    const { data, error } = await supabase.from('board').insert([{ name }]).select()
+  const addBoardCard = async ({ content, listid }: { content: string; listid: number }) => {
+    const { data, error } = await supabase
+      .from('cards')
+      .insert([{ content, boardviewid: listid }])
+      .select()
     return { data, error }
   }
 
-  const readBoardCard = async () => {
+  const readBoardCard = async ({listindexid}:{listindexid:number}) => {
     let { data, error } = await supabase.from('board').select('id,name')
     return { data, error }
   }
