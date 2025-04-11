@@ -23,10 +23,13 @@
         </div>
         <!-- <div class=""> -->
         <button
-          type="submit"
-          class="bg-blue-900 p-2 text-white rounded-md mt-3 w-full hover:bg-white hover:text-black in-hover:border-blue-900 hover:border hover:cursor-pointer"
+          class="bg-blue-900 p-2 cursor-pointer text-white rounded-md mt-3 w-full hover:bg-white hover:text-black in-hover:border-blue-900 hover:border hover:cursor-pointer"
         >
-          S'inscrire
+          <div v-if="!loading">S'inscrire</div>
+          <div
+            v-else
+            class="w-6 h-6 border-3 border-gray-200 border-t-blue-500 rounded-full animate-spin mx-auto"
+          ></div>
         </button>
         <!-- </div> -->
       </form>
@@ -57,8 +60,16 @@ async function handleSubmit() {
 
   console.log({ res })
 
-  toast('Inscription réussi.!!!', {
-    autoClose: 1000,
-  })
+  if (!res.error) {
+    toast('Inscription réussi.!!!', {
+      autoClose: 1000,
+      type: 'success',
+    })
+  } else {
+    toast(res.error.message, {
+      autoClose: 1000,
+      type: 'error',
+    })
+  }
 }
 </script>

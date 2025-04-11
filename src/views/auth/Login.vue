@@ -23,9 +23,13 @@
         </div>
         <div class="">
           <button
-            class="bg-blue-900 p-2 text-white rounded-md mt-3 w-full hover:bg-white hover:text-black in-hover:border-blue-900 hover:border hover:cursor-pointer"
+            class="bg-blue-900 p-2 cursor-pointer text-white rounded-md mt-3 w-full hover:bg-white hover:text-black in-hover:border-blue-900 hover:border hover:cursor-pointer"
           >
-            Se connecter
+            <div v-if="!loading">Se connecter</div>
+            <div
+              v-else
+              class="w-6 h-6 border-3 border-gray-200 border-t-blue-500 rounded-full animate-spin mx-auto"
+            ></div>
           </button>
         </div>
       </form>
@@ -49,15 +53,21 @@ const { login } = useAuthUser()
 
 async function handleSubmit() {
   loading.value = true
-  //   console.log({ data })
+
   let res = await login(data.value)
 
   loading.value = false
 
-  console.log({ res })
-
-  toast('Connexion réussi.!!!', {
-    autoClose: 1000,
-  })
+  if (!res.error) {
+    toast('Connexion réussi.!!!', {
+      autoClose: 1000,
+      type: 'success',
+    })
+  } else {
+    toast(res.error.message, {
+      autoClose: 1000,
+      type: 'error',
+    })
+  }
 }
 </script>
