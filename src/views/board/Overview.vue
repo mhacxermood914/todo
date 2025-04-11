@@ -116,7 +116,7 @@ const boardName = computed(() => {
 })
 
 const list = boardStore.getListByBoardId(boardId).list
-console.log({ list })
+console.log({ list: list.length })
 
 const textareas = ref([])
 
@@ -167,12 +167,15 @@ function onDrop(targetListIndex) {
 }
 
 function addNewList() {
-  list.value.push({
-    id: list.value.length + 1,
-    boardId: 1,
-    name: 'untitled',
-    cards: [],
-  })
+  boardStore.addListToBoardByid(
+    boardStore.boards.findIndex((el) => el.id === boardId),
+    {
+      id: list.length + 1,
+      boardId,
+      name: 'untitled',
+      cards: [],
+    },
+  )
 }
 
 function addCard(index) {
