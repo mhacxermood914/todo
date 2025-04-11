@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 export const useBoardStore = defineStore('board-store', {
   state(): any {
     return {
-      board: [
+      boards: [
         {
           id: 1,
           name: 'Board 1',
@@ -14,40 +14,43 @@ export const useBoardStore = defineStore('board-store', {
   },
   getters: {
     getListByBoardId: (state) => {
-      return (id: number) => state.board.find((el: any) => el.id === id)
+      return (id: number) => state.boards.find((el: any) => el.id === id)
     },
   },
   actions: {
+    addBoard(board: any) {
+      this.boards.push(board)
+    },
     addListToBoardByid(index: number, list: any) {
-      this.board[index].list.push(list)
+      this.boards[index].list.push(list)
     },
     deleteListFromBoardByid(index: number, listIndex: number) {
-      if (this.board[index] && this.board[index].list[listIndex]) {
-        this.board[index].list.splice(listIndex, 1)
+      if (this.boards[index] && this.boards[index].list[listIndex]) {
+        this.boards[index].list.splice(listIndex, 1)
       }
     },
     updateListName(index: number, listIndex: number, newName: string) {
-      if (this.board[index] && this.board[index].list[listIndex]) {
-        this.board[index].list[listIndex].name = newName
+      if (this.boards[index] && this.boards[index].list[listIndex]) {
+        this.boards[index].list[listIndex].name = newName
       }
     },
     addCardToList(boardIndex: number, listIndex: number, content: string) {
       const newCard = {
-        id: this.board[boardIndex].list[listIndex].cards.length + 1,
+        id: this.boards[boardIndex].list[listIndex].cards.length + 1,
         content: content || '',
       }
 
-      this.board[boardIndex].list[listIndex].cards.unshift(newCard)
+      this.boards[boardIndex].list[listIndex].cards.unshift(newCard)
     },
 
     deleteCardFromList(boardIndex: number, listIndex: number, cardIndex: number) {
-      if (this.board[boardIndex] && this.board[boardIndex].list[listIndex]) {
-        this.board[boardIndex].list[listIndex].cards.splice(cardIndex, 1)
+      if (this.boards[boardIndex] && this.boards[boardIndex].list[listIndex]) {
+        this.boards[boardIndex].list[listIndex].cards.splice(cardIndex, 1)
       }
     },
 
     updateCardInList(boardIndex: number, listIndex: number, cardIndex: number, updatedCard: any) {
-      const card = this.board[boardIndex]?.list[listIndex]?.cards[cardIndex]
+      const card = this.boards[boardIndex]?.list[listIndex]?.cards[cardIndex]
       if (card) {
         card.content = updatedCard.content || card.content
       }

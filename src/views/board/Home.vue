@@ -32,7 +32,7 @@
         <router-link
           tag="div"
           :to="{ path: '/board/' + item.id }"
-          v-for="item in boards"
+          v-for="item in boardStore.boards"
           :key="item.id"
           class="bg-white flex items-center justify-center w-full hover:bg-blue-900 hover:text-white rounded-md h-[8rem] shadow-md cursor-pointer"
         >
@@ -46,18 +46,21 @@
 import { ref } from 'vue'
 import useAuthUser from '@/composables/useAuth'
 import router from '@/router'
+import { useBoardStore } from '@/stores/board'
+
+const boardStore = useBoardStore()
 
 const { logout } = useAuthUser()
 
 const modal = ref(null)
 
-const boards = ref([
-  {
-    id: 1,
-    name: 'Board 1',
-    list: [],
-  },
-])
+// const boards = ref([
+//   {
+//     id: 1,
+//     name: 'Board 1',
+//     list: [],
+//   },
+// ])
 
 const board = ref({
   name: '',
@@ -73,10 +76,12 @@ function closeModal() {
 
 function addBoard() {
   let payload = {
-    id: boards.value.length + 1,
+    id: boardStore.boards.length + 1,
     ...board.value,
   }
-  boards.value.push(payload)
+
+  boardStore.addBoard(payload)
+  // boards.value.push(payload)
   board.value.name = ''
   closeModal()
 }

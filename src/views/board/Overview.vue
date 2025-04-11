@@ -27,13 +27,17 @@
             />
             <div class="flex items-center">
               <button
-                class="text-xl font-medium cursor-pointer hover:bg-gray-200 w-8 rounded-md"
+                class="text-2xl font-medium cursor-pointer hover:bg-gray-200 w-8 rounded-md"
                 @click="addCard(i)"
               >
                 +
               </button>
-              <button class="text-2xl font-medium cursor-pointer hover:bg-gray-200 w-8 rounded-md">
-                <sup>...</sup>
+              <button class="font-medium cursor-pointer hover:bg-gray-200 w-8 rounded-md">
+                <font-awesome-icon
+                  icon="trash-alt"
+                  class="cursor-pointer"
+                  @click="moveListToTrash(i)"
+                />
               </button>
             </div>
           </div>
@@ -60,7 +64,7 @@
                     <font-awesome-icon
                       icon="trash-alt"
                       class="cursor-pointer"
-                      @click="moveToTrash(i, j)"
+                      @click="moveCardToTrash(i, j)"
                     />
                   </div>
                 </div>
@@ -94,8 +98,11 @@
 <script setup>
 import { ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
+import {useBoardStore} from "@/stores/board"
 
 const listInputClassName = ref('outline-none font-semibold w-11/12')
+
+const boardStore = useBoardStore()
 
 const list = ref([
   {
@@ -172,9 +179,16 @@ function onAdd(event) {
   console.log('add', event)
 }
 
-function moveToTrash(i, j) {
+function moveCardToTrash(i, j) {
   list.value[i].cards = list.value[i].cards.filter((el, ind) => ind !== j)
   console.log({ list })
+}
+
+function moveListToTrash(i) {
+  if(i){
+    list.value = list.value.filter((el, ind) => ind !== i)
+    console.log({ list })
+  }
 }
 
 function onBlur() {
