@@ -1,6 +1,11 @@
 <template>
   <div class="w-11/12 mx-auto mt-[2rem] font-poppins overflow-x-auto">
-    <div class="font-semibold mb-3">{{ boardName }}</div>
+    <div class="font-semibold mb-3 flex item-center space-x-3">
+      <button class="flex space-x-3 items-center" @click="goBack">
+        <font-awesome-icon icon="arrow-alt-circle-left" class="cursor-pointer" />
+        <div>{{ boardName }}</div>
+      </button>
+    </div>
     <div class="flex h-[calc(100vh-10rem)] space-x-3">
       <div class="w-[20%] flex space-x-3">
         <div
@@ -124,6 +129,10 @@ function setTextareaRef(el, index, j) {
   if (el) {
     textareas.value[`${index + '' + j}`] = el
   }
+}
+
+function goBack() {
+  router.back()
 }
 
 function focusTextarea(index, j) {
