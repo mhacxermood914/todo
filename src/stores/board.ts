@@ -3,20 +3,7 @@ import { defineStore } from 'pinia'
 export const useBoardStore = defineStore('board-store', {
   state(): any {
     return {
-      boards: [
-        {
-          id: 1,
-          name: 'Untitled Board',
-          list: [
-            {
-              id: 1,
-              boardId: 1,
-              name: 'untitled',
-              cards: [],
-            },
-          ],
-        },
-      ],
+      boards: [],
     }
   },
   getters: {

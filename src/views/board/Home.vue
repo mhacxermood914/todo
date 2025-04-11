@@ -69,7 +69,7 @@ import router from '@/router'
 import { useBoardStore } from '@/stores/board'
 
 const boardStore = useBoardStore()
-const { addBoard: addToBoard, readBoard } = useBoard()
+const { addBoard: addToBoard, readBoard, addBoardList, readBoardList, deleteBoard } = useBoard()
 
 onMounted(() => {
   getBoard()
@@ -77,20 +77,28 @@ onMounted(() => {
 
 async function getBoard() {
   const res = await readBoard()
-  boardStore.setBoards(
-    res.data.map((el) => ({
-      ...el,
-      list: [
-        {
-          id: boardStore.getBoard().length + 1,
+  const boards = await Promise.all(
+    res.data.map(async (el) => {
+      const lists = await readBoardList(el.id)
+
+      const mappedLists = await Promise.all(
+        lists.data.map(async (listItem) => ({
+          id: listItem.id,
           boardId: el.id,
-          name: 'untitled',
-          cards: [],
-        },
-      ],
-    })),
+          name: listItem.name,
+          cards: [], // Add card fetching logic here if needed
+        })),
+      )
+
+      return {
+        ...el,
+        list: mappedLists,
+      }
+    }),
   )
-  console.log({ res })
+
+  console.log({ res, boards })
+  boardStore.setBoards(boards)
 }
 
 const { logout } = useAuthUser()
@@ -124,7 +132,9 @@ async function addBoard() {
   }
 
   let res = await addToBoard({ name: payload.name })
-  
+  console.log({ res })
+
+  addBoardList({ boardid: res.data.pop().id, name: 'Untitled' })
 
   boardStore.addBoard(payload)
   board.value.name = ''
