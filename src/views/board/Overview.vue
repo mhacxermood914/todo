@@ -13,11 +13,17 @@
           <div class="flex justify-between">
             <input
               type="text"
-              :key="'input-' + i"
               v-model="item.name"
+              @keyup.enter="$event.target.blur()"
               @focus="onFocus"
               @blur="onBlur"
-              :class="listInputClassName"
+              :class="[
+                'max-w-11/12',
+                'overflow-hidden',
+                'whitespace-nowrap',
+                'truncate',
+                listInputClassName,
+              ]"
             />
             <div class="flex items-center">
               <button
@@ -43,10 +49,14 @@
             >
               <div class="flex justify-end h-8">
                 <div class="flex space-x-4">
-                  <div class="hidden group-hover:block">
-                    <font-awesome-icon icon="pencil-alt" class="cursor-pointer" />
+                  <div class="group-hover:block">
+                    <font-awesome-icon
+                      icon="pencil-alt"
+                      class="cursor-pointer"
+                      @click="focusTextarea(i, j)"
+                    />
                   </div>
-                  <div class="hidden group-hover:block">
+                  <div class="group-hover:block">
                     <font-awesome-icon
                       icon="trash-alt"
                       class="cursor-pointer"
@@ -59,6 +69,7 @@
               <textarea
                 class="w-full resize-none bg-gray-100 outline-none p-2"
                 id=""
+                :ref="(el) => setTextareaRef(el, i, j)"
                 rows="4"
                 @blur="handleBlur"
                 v-model="card.content"
@@ -84,7 +95,7 @@
 import { ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 
-const listInputClassName = ref('outline-none font-semibold w-[8ch]')
+const listInputClassName = ref('outline-none font-semibold w-11/12')
 
 const list = ref([
   {
@@ -95,13 +106,19 @@ const list = ref([
   },
 ])
 
-const textareas = ref([]);
+const textareas = ref([])
 
-function focusTextarea(index){
-  if (textareas.value[index]) {
-    textareas.value[index].focus();
+function setTextareaRef(el, index, j) {
+  if (el) {
+    textareas.value[`${index + '' + j}`] = el
   }
-};
+}
+
+function focusTextarea(index, j) {
+  if (textareas.value[`${index + '' + j}`]) {
+    textareas.value[`${index + '' + j}`].focus()
+  }
+}
 
 const el = ref(null)
 const l = ref(null)
@@ -162,7 +179,7 @@ function moveToTrash(i, j) {
 
 function onBlur() {
   console.log({ list })
-  listInputClassName.value = 'outline-none font-semibold w-[8ch]'
+  listInputClassName.value = 'outline-none font-semibold w-11/12'
 }
 
 function handleBlur() {
@@ -174,6 +191,6 @@ function onCardChange(event) {
 }
 
 function onFocus() {
-  listInputClassName.value = 'border border-gray-400 w-[8ch]'
+  listInputClassName.value = 'w-11/12'
 }
 </script>
