@@ -105,7 +105,7 @@ async function getBoard() {
             id: listItem.id,
             boardId: el.id,
             name: listItem.name,
-            cards: cards.data, // Add card fetching logic here if needed
+            cards: cards.data,
           }
         }),
       )
