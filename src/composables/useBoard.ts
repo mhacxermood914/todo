@@ -70,7 +70,7 @@ export default function useBoard() {
   }
 
   const deleteBoardCard = async (id: number) => {
-    const { error } = await supabase.from('cards').delete().eq('boardviewid', id)
+    const { error } = await supabase.from('cards').delete().eq('id', id)
     return { error }
   }
 
