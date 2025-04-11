@@ -2,21 +2,18 @@
   <div class="w-11/12 mx-auto mt-[2rem] font-poppins overflow-x-auto">
     <div class="font-semibold mb-3">Board 1</div>
     <div class="flex h-[calc(100vh-10rem)] space-x-3">
-      <VueDraggable
-        @add="onAdd"
-        :group="{ name: 'cards', pull: true, put: true }"
-        class="w-full flex"
-        v-model="list"
-      >
+      <div class="w-[20%] flex space-x-3">
         <div
+          @drop="onDrop(i)"
+          @dragover.prevent
           v-for="(item, i) in list"
-          :key="item.id"
-          class="bg-white h-full w-[20%] overflow-y-scroll rounded-md p-2 flex-shrink-0"
+          :key="i"
+          class="bg-white h-full w-full overflow-y-scroll rounded-md p-2 flex-shrink-0"
         >
           <div class="flex justify-between">
             <input
               type="text"
-              :key="'input-' + item.id"
+              :key="'input-' + i"
               v-model="item.name"
               @focus="onFocus"
               @blur="onBlur"
@@ -36,15 +33,12 @@
           </div>
 
           <hr />
-          <VueDraggable
-            :group="{ name: 'cards', pull: true, put: true }"
-            itemKey="id"
-            :animation="200"
-            @change="onCardChange"
-          >
+          <div>
             <div
               v-for="(card, j) in item.cards"
               :key="card.id"
+              draggable="true"
+              @dragstart="onDragStart(card, i, j)"
               class="w-full group bg-gray-200 my-4 p-2 rounded-md min-h-[8rem] cursor-pointer max-h-[14rem]"
             >
               <div class="flex justify-end h-8">
@@ -70,7 +64,7 @@
                 v-model="card.content"
               ></textarea>
             </div>
-          </VueDraggable>
+          </div>
         </div>
 
         <div class="w-[8rem] flex-shrink-0">
@@ -81,7 +75,7 @@
             Nouvelle liste
           </button>
         </div>
-      </VueDraggable>
+      </div>
     </div>
   </div>
 </template>
@@ -101,8 +95,47 @@ const list = ref([
   },
 ])
 
+const textareas = ref([]);
+
+function focusTextarea(index){
+  if (textareas.value[index]) {
+    textareas.value[index].focus();
+  }
+};
+
 const el = ref(null)
 const l = ref(null)
+
+const draggedCard = ref(null)
+const draggedFrom = ref({ listIndex: null, cardIndex: null })
+
+function onDragStart(card, listIndex, cardIndex) {
+  console.log({ card, listIndex, cardIndex })
+  draggedCard.value = card
+  draggedFrom.value = { listIndex, cardIndex }
+}
+
+function onDrop(targetListIndex) {
+  const { listIndex: fromListIndex, cardIndex } = draggedFrom.value
+
+  console.log({ targetListIndex })
+
+  if (
+    draggedCard.value &&
+    fromListIndex !== null &&
+    cardIndex !== null &&
+    fromListIndex !== targetListIndex
+  ) {
+    // Remove from original
+    const card = list.value[fromListIndex].cards.splice(cardIndex, 1)[0]
+    // Add to target
+    list.value[targetListIndex].cards.unshift(card)
+
+    // Reset temp values
+    draggedCard.value = null
+    draggedFrom.value = { listIndex: null, cardIndex: null }
+  }
+}
 
 function addNewList() {
   list.value.push({
