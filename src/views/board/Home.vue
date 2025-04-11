@@ -55,6 +55,7 @@ const boards = ref([
   {
     id: 1,
     name: 'Board 1',
+    list: [],
   },
 ])
 
