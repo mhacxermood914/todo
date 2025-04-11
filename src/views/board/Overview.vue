@@ -179,7 +179,11 @@ function addNewList() {
 }
 
 function addCard(index) {
-  list.value[index].cards.unshift({ id: list.value[index].cards.length + 1, content: '' })
+  boardStore.addCardToList(
+    boardStore.boards.findIndex((el) => el.id === boardId),
+    index,
+    null,
+  )
   console.log({ list })
 }
 
