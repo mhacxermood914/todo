@@ -1,7 +1,7 @@
 <template>
   <div class="w-11/12 mx-auto mt-[2rem] font-poppins overflow-x-auto">
     <div class="font-semibold mb-3 flex item-center space-x-3">
-      <button class="flex space-x-3 items-center" @click="goBack">
+      <button class="flex space-x-3 items-center cursor-pointer" @click="goBack">
         <font-awesome-icon icon="arrow-alt-circle-left" class="cursor-pointer" />
         <div>{{ boardName }}</div>
       </button>
