@@ -64,6 +64,16 @@ export default function useBoard() {
     return { data, error }
   }
 
+  const moveBoardCardFromListToAnother = async ({ from, to }: any) => {
+    console.log({ from, to })
+    const { data, error } = await supabase
+      .from('cards')
+      .update({ boardviewid: to })
+      .eq('id', from)
+      .select()
+    return { data, error }
+  }
+
   const updateBoardCard = async ({ name, id }: { name: string; id: number }) => {
     const { data, error } = await supabase.from('board').update({ name }).eq('id', id).select()
     return { data, error }
@@ -84,6 +94,8 @@ export default function useBoard() {
     updateBoardList,
     readBoardList,
     deleteBoardList,
+
+    moveBoardCardFromListToAnother,
 
     addBoardCard,
     updateBoardCard,

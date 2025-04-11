@@ -9,7 +9,7 @@
     <div class="flex h-[calc(100vh-10rem)] space-x-3">
       <div class="w-[20%] flex space-x-3">
         <div
-          @drop="onDrop(i)"
+          @drop="onDrop(i, item.id)"
           @dragover.prevent
           v-for="(item, i) in list"
           :key="i"
@@ -41,7 +41,7 @@
                 <font-awesome-icon
                   icon="trash-alt"
                   class="cursor-pointer"
-                  @click="moveListToTrash(i)"
+                  @click="moveListToTrash(i, item.id)"
                 />
               </button>
             </div>
@@ -53,7 +53,7 @@
               v-for="(card, j) in item.cards"
               :key="card.id"
               draggable="true"
-              @dragstart="onDragStart(card, i, j)"
+              @dragstart="onDragStart(card, i, j, card.id)"
               class="w-full group bg-gray-200 my-4 p-2 rounded-md min-h-[8rem] cursor-move max-h-[14rem]"
             >
               <div class="flex justify-end h-8">
@@ -101,7 +101,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import useBoard from '@/composables/useBoard'
 import { useRoute, useRouter } from 'vue-router'
 import { VueDraggable } from 'vue-draggable-plus'
@@ -117,7 +117,13 @@ const boardStore = useBoardStore()
 
 const boardId = Number(route.params.id)
 
-const { addBoardList, addBoardCard, deleteBoardCard } = useBoard()
+const {
+  addBoardList,
+  addBoardCard,
+  deleteBoardCard,
+  deleteBoardList,
+  moveBoardCardFromListToAnother,
+} = useBoard()
 
 const boardName = computed(() => {
   const board = boardStore.getListByBoardId(boardId)
@@ -125,7 +131,6 @@ const boardName = computed(() => {
 })
 
 const list = boardStore.getListByBoardId(boardId).list
-console.log({ list: list.length })
 
 const textareas = ref([])
 
@@ -149,16 +154,16 @@ const el = ref(null)
 const l = ref(null)
 
 const draggedCard = ref(null)
-const draggedFrom = ref({ listIndex: null, cardIndex: null })
+const draggedFrom = ref({ listIndex: null, cardIndex: null, fromlistid: null })
 
-function onDragStart(card, listIndex, cardIndex) {
-  console.log({ card, listIndex, cardIndex })
+function onDragStart(card, listIndex, cardIndex, id = null) {
+  console.log({ card, listIndex, cardIndex, id })
   draggedCard.value = card
-  draggedFrom.value = { listIndex, cardIndex }
+  draggedFrom.value = { listIndex, cardIndex, id }
 }
 
-function onDrop(targetListIndex) {
-  const { listIndex: fromListIndex, cardIndex } = draggedFrom.value
+function onDrop(targetListIndex, targetId = null) {
+  const { listIndex: fromListIndex, cardIndex, id } = draggedFrom.value
 
   console.log({ targetListIndex })
 
@@ -178,6 +183,9 @@ function onDrop(targetListIndex) {
       null,
       card,
     )
+
+    // update
+    moveBoardCardFromListToAnother({ from: id, to: targetId })
 
     // Reset temp values
     draggedCard.value = null
@@ -225,12 +233,14 @@ function moveCardToTrash(i, j, id = null) {
   deleteBoardCard(id)
 }
 
-function moveListToTrash(i) {
+function moveListToTrash(i, id = null) {
   if (i) {
     boardStore.deleteListFromBoardByid(
       boardStore.boards.findIndex((el) => el.id === boardId),
       i,
     )
+
+    deleteBoardList(id)
   }
 }
 
