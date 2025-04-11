@@ -74,8 +74,8 @@ export default function useBoard() {
     return { data, error }
   }
 
-  const updateBoardCard = async ({ name, id }: { name: string; id: number }) => {
-    const { data, error } = await supabase.from('board').update({ name }).eq('id', id).select()
+  const updateBoardCard = async ({ content, id }: { content: string; id: number }) => {
+    const { data, error } = await supabase.from('cards').update({ content }).eq('id', id).select()
     return { data, error }
   }
 

@@ -21,7 +21,7 @@
               v-model="item.name"
               @keyup.enter="$event.target.blur()"
               @focus="onFocus"
-              @blur="onBlur"
+              @blur="onBlur(item.id, item.name)"
               :class="[
                 'max-w-11/12',
                 'overflow-hidden',
@@ -80,7 +80,7 @@
                 id=""
                 :ref="(el) => setTextareaRef(el, i, j)"
                 rows="4"
-                @blur="handleBlur"
+                @blur="handleBlur(card.content, card.id)"
                 v-model="card.content"
               ></textarea>
             </div>
@@ -120,9 +120,12 @@ const boardId = Number(route.params.id)
 const {
   addBoardList,
   addBoardCard,
+  updateBoard,
   deleteBoardCard,
   deleteBoardList,
+  updateBoardCard,
   moveBoardCardFromListToAnother,
+  updateBoardList,
 } = useBoard()
 
 const boardName = computed(() => {
@@ -139,6 +142,8 @@ function setTextareaRef(el, index, j) {
     textareas.value[`${index + '' + j}`] = el
   }
 }
+
+
 
 function goBack() {
   router.back()
@@ -244,12 +249,13 @@ function moveListToTrash(i, id = null) {
   }
 }
 
-function onBlur() {
-  console.log({ list })
+function onBlur(id, name) {
+  updateBoardList({ name, id })
   listInputClassName.value = 'outline-none font-semibold w-11/12'
 }
 
-function handleBlur() {
+function handleBlur(content, id) {
+  updateBoardCard({ content, id })
   console.log({ list })
 }
 

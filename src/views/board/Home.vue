@@ -3,7 +3,7 @@
     <Modal ref="modal">
       <template #modal-content>
         <div class="font-poppins">
-          <form @submit.prevent="addBoard">
+          <form @submit.prevent="edit ? handleEdit() : addBoard()">
             <div>
               <label for="" class="mt-8 block">Nom du board</label>
               <input
@@ -14,7 +14,9 @@
             <button
               class="bg-blue-900 p-2 text-white rounded-md mt-3 w-full hover:bg-white hover:text-black in-hover:border-blue-900 hover:border hover:cursor-pointer"
             >
-              <div v-if="!loading">Ajouter un nouveau board</div>
+              <div v-if="!loading">
+                {{ edit ? 'Mettre a jour le nom du board' : 'Ajouter un nouveau board' }}
+              </div>
               <div
                 v-else
                 class="w-6 h-6 border-3 border-gray-200 border-t-blue-500 rounded-full animate-spin mx-auto"
@@ -33,7 +35,7 @@
     </div>
     <div class="flex items-center justify-center">
       <div
-        v-if="loading"
+        v-if="loadingBoards"
         class="w-6 h-6 border-3 border-gray-200 border-t-blue-500 rounded-full animate-spin mx-auto"
       ></div>
       <div class="text-2xl" v-else-if="!boardStore.boards.length">No Board available</div>
@@ -51,7 +53,7 @@
                 <font-awesome-icon
                   icon="pencil-alt"
                   class="cursor-pointer"
-                  @click="focusTextarea(i, j)"
+                  @click.stop="editBoard($event, i, item)"
                 />
               </div>
               <div class="group-hover hidden">
@@ -75,6 +77,8 @@ import useAuthUser from '@/composables/useAuth'
 import useBoard from '@/composables/useBoard'
 import router from '@/router'
 import { useBoardStore } from '@/stores/board'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 
 const boardStore = useBoardStore()
 const {
@@ -82,6 +86,8 @@ const {
   readBoard,
   addBoardList,
   readBoardList,
+  updateBoard,
+  updateBoardCard,
   deleteBoard,
   readBoardCard,
 } = useBoard()
@@ -91,9 +97,12 @@ onMounted(() => {
 })
 
 const loading = ref(false)
+const loadingBoards = ref(false)
+
+const edit = ref(false)
 
 async function getBoard() {
-  loading.value = true
+  loadingBoards.value = true
   const res = await readBoard()
   const boards = await Promise.all(
     res.data.map(async (el) => {
@@ -121,7 +130,7 @@ async function getBoard() {
   console.log({ res, boards })
   boardStore.setBoards(boards)
 
-  loading.value = false
+  loadingBoards.value = false
 }
 
 const { logout } = useAuthUser()
@@ -130,13 +139,36 @@ const modal = ref(null)
 
 const board = ref({
   name: '',
+  id: null,
 })
+
+async function editBoard(event, index, item) {
+  event.preventDefault()
+  board.value.name = item.name
+  board.value.id = item.id
+  edit.value = true
+  showModal()
+}
+
+async function handleEdit() {
+  await updateBoard({ id: board.value.id, name: board.value.name })
+  toast('Mise a jour éffectuée avec succès.', {
+    autoClose: 1000,
+    type: 'success',
+  })
+  getBoard()
+  board.value.name = ''
+  board.value.id = null
+  closeModal()
+}
 
 function showModal() {
   modal.value.openModal()
 }
 
 function closeModal() {
+  edit.value = false
+
   modal.value.closeModal()
 }
 
