@@ -102,7 +102,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useBoardStore } from '@/stores/board'
 import { createDOMCompilerError } from '@vue/compiler-dom'
@@ -110,6 +110,7 @@ import { createDOMCompilerError } from '@vue/compiler-dom'
 const listInputClassName = ref('outline-none font-semibold w-11/12')
 
 const route = useRoute()
+const router = useRouter()
 
 const boardStore = useBoardStore()
 
