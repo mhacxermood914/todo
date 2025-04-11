@@ -7,7 +7,7 @@
       <div class="relative group">
         <div class="h-10 w-10 rounded-full bg-gray-400 cursor-pointer"></div>
         <ul
-          class="absolute hidden group-hover:block bg-white shadow-md -mt-1 pt-[.5rem] rounded text-sm z-10 right-[.5rem]"
+          class="absolute hidden group-hover bg-white shadow-md -mt-1 pt-[.5rem] rounded text-sm z-10 right-[.5rem]"
         >
           <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer" @click="loggedOut">Deconnexion</li>
         </ul>

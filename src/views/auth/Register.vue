@@ -35,6 +35,8 @@
 </template>
 <script setup>
 import { ref } from 'vue'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 import useAuthUser from '@/composables/useAuth'
 
 const data = ref({
@@ -43,9 +45,20 @@ const data = ref({
 })
 
 const { register } = useAuthUser()
+const loading = ref(false)
 
 async function handleSubmit() {
   //   console.log({ data })
+  loading.value = true
+
   let res = await register(data.value)
+
+  loading.value = false
+
+  console.log({ res })
+
+  toast('Inscription réussi.!!!', {
+    autoClose: 1000,
+  })
 }
 </script>

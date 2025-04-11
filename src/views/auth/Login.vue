@@ -34,6 +34,8 @@
 </template>
 <script setup>
 import { ref } from 'vue'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 import useAuthUser from '@/composables/useAuth'
 
 const data = ref({
@@ -41,10 +43,21 @@ const data = ref({
   password: '',
 })
 
+const loading = ref(false)
+
 const { login } = useAuthUser()
 
 async function handleSubmit() {
+  loading.value = true
   //   console.log({ data })
   let res = await login(data.value)
+
+  loading.value = false
+
+  console.log({ res })
+
+  toast('Connexion réussi.!!!', {
+    autoClose: 1000,
+  })
 }
 </script>
