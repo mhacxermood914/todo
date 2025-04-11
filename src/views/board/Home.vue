@@ -64,10 +64,12 @@
 <script setup>
 import { ref } from 'vue'
 import useAuthUser from '@/composables/useAuth'
+import useBoard from '@/composables/useBoard'
 import router from '@/router'
 import { useBoardStore } from '@/stores/board'
 
 const boardStore = useBoardStore()
+const { add } = useBoard()
 
 const { logout } = useAuthUser()
 
@@ -98,6 +100,8 @@ function addBoard() {
       },
     ],
   }
+
+  add({ name: payload.name })
 
   boardStore.addBoard(payload)
   board.value.name = ''
