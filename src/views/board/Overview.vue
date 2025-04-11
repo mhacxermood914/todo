@@ -69,7 +69,7 @@
                     <font-awesome-icon
                       icon="trash-alt"
                       class="cursor-pointer"
-                      @click="moveCardToTrash(i, j)"
+                      @click="moveCardToTrash(i, j, card.id)"
                     />
                   </div>
                 </div>
@@ -117,7 +117,7 @@ const boardStore = useBoardStore()
 
 const boardId = Number(route.params.id)
 
-const { addBoardList, addBoardCard } = useBoard()
+const { addBoardList, addBoardCard, deleteBoardCard } = useBoard()
 
 const boardName = computed(() => {
   const board = boardStore.getListByBoardId(boardId)
@@ -186,7 +186,6 @@ function onDrop(targetListIndex) {
 }
 
 function addNewList() {
-
   boardStore.addListToBoardByid(
     boardStore.boards.findIndex((el) => el.id === boardId),
     {
@@ -198,17 +197,16 @@ function addNewList() {
   )
 
   addBoardList({ boardid: boardId, name: 'Untitled' })
-
 }
 
-function addCard(index, id=null) {
+function addCard(index, id = null) {
   boardStore.addCardToList(
     boardStore.boards.findIndex((el) => el.id === boardId),
     index,
     null,
   )
 
-  addBoardCard({content:'', listid: id})
+  addBoardCard({ content: '', listid: id })
 
   console.log({ list })
 }
@@ -217,12 +215,14 @@ function onAdd(event) {
   console.log('add', event)
 }
 
-function moveCardToTrash(i, j) {
+function moveCardToTrash(i, j, id = null) {
   boardStore.deleteCardFromList(
     boardStore.boards.findIndex((el) => el.id === boardId),
     i,
     j,
   )
+
+  deleteBoardCard(id)
 }
 
 function moveListToTrash(i) {

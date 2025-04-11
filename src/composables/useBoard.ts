@@ -56,8 +56,11 @@ export default function useBoard() {
     return { data, error }
   }
 
-  const readBoardCard = async ({listindexid}:{listindexid:number}) => {
-    let { data, error } = await supabase.from('board').select('id,name')
+  const readBoardCard = async ({ listid }: { listid: number }) => {
+    let { data, error } = await supabase
+      .from('cards')
+      .select('id,content')
+      .eq('boardviewid', listid)
     return { data, error }
   }
 
@@ -67,7 +70,7 @@ export default function useBoard() {
   }
 
   const deleteBoardCard = async (id: number) => {
-    const { error } = await supabase.from('board').delete().eq('id', id)
+    const { error } = await supabase.from('cards').delete().eq('boardviewid', id)
     return { error }
   }
 

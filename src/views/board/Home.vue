@@ -73,7 +73,14 @@ import router from '@/router'
 import { useBoardStore } from '@/stores/board'
 
 const boardStore = useBoardStore()
-const { addBoard: addToBoard, readBoard, addBoardList, readBoardList, deleteBoard } = useBoard()
+const {
+  addBoard: addToBoard,
+  readBoard,
+  addBoardList,
+  readBoardList,
+  deleteBoard,
+  readBoardCard,
+} = useBoard()
 
 onMounted(() => {
   getBoard()
@@ -89,12 +96,18 @@ async function getBoard() {
       const lists = await readBoardList(el.id)
 
       const mappedLists = await Promise.all(
-        lists.data.map(async (listItem) => ({
-          id: listItem.id,
-          boardId: el.id,
-          name: listItem.name,
-          cards: [], // Add card fetching logic here if needed
-        })),
+        lists.data.map(async (listItem) => {
+          const cards = await readBoardCard({ listid: listItem.id })
+
+          console.log({ cards })
+
+          return {
+            id: listItem.id,
+            boardId: el.id,
+            name: listItem.name,
+            cards: cards.data, // Add card fetching logic here if needed
+          }
+        }),
       )
 
       return {
