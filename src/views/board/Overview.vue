@@ -262,16 +262,27 @@ async function moveCardToTrash(i, j, id = null) {
   })
 }
 
-function moveListToTrash(i, id = null) {
-  if (id) {
+async function moveListToTrash(i, id = null) {
+  if (i) {
+    const idToast = toast.loading('Please wait...', {
+      position: toast.POSITION.TOP_RIGHT,
+    })
+    await deleteBoardList(id)
+
     boardStore.deleteListFromBoardByid(
       boardStore.boards.findIndex((el) => el.id === boardId),
       boardStore.boards[boardStore.boards.findIndex((el) => el.id === boardId)].list.findIndex(
         (el) => el.id == id,
       ),
     )
-
-    deleteBoardList(id)
+    toast.update(idToast, {
+      render: 'Suppression effectuée avec succès.',
+      autoClose: true,
+      closeOnClick: true,
+      closeButton: true,
+      type: 'success',
+      isLoading: false,
+    })
   }
 }
 
