@@ -104,6 +104,8 @@
 import { ref, computed, watch } from 'vue'
 import useBoard from '@/composables/useBoard'
 import debounce from 'lodash.debounce'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 import { useRoute, useRouter } from 'vue-router'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useBoardStore } from '@/stores/board'
@@ -207,6 +209,9 @@ async function addNewList() {
 }
 
 async function addCard(index, id = null) {
+  const idToast = toast.loading('Please wait...', {
+    position: toast.POSITION.TOP_RIGHT,
+  })
   let res = await addBoardCard({ content: '', listid: id })
   console.log({ res })
 
@@ -218,6 +223,15 @@ async function addCard(index, id = null) {
     res.data.pop().id,
   )
 
+  toast.update(idToast, {
+    render: 'Nouvelle card ajouter avec succès.',
+    autoClose: true,
+    closeOnClick: true,
+    closeButton: true,
+    type: 'success',
+    isLoading: false,
+  })
+
   // console.log({ list })
 }
 
@@ -225,14 +239,27 @@ function onAdd(event) {
   // console.log('add', event)
 }
 
-function moveCardToTrash(i, j, id = null) {
+async function moveCardToTrash(i, j, id = null) {
+  const idToast = toast.loading('Please wait...', {
+    position: toast.POSITION.TOP_RIGHT,
+  })
+
+  await deleteBoardCard(id)
+
   boardStore.deleteCardFromList(
     boardStore.boards.findIndex((el) => el.id === boardId),
     i,
     j,
   )
 
-  deleteBoardCard(id)
+  toast.update(idToast, {
+    render: 'Suppression effectuée avec succès.',
+    autoClose: true,
+    closeOnClick: true,
+    closeButton: true,
+    type: 'success',
+    isLoading: false,
+  })
 }
 
 function moveListToTrash(i, id = null) {
